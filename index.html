@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portofolio Kelas XI F3</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Reset */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { 
+      scroll-behavior: smooth; 
+      overflow-y: scroll; /* scrollbar fix biar tidak goyang */
+    }
+    body { font-family:'Segoe UI', Tahoma, sans-serif; line-height:1.6; background:#f9f9f9; color:#333; }
+
+    /* Navbar */
+    .navbar { background:#0077b6; color:#fff; padding:14px 0; position:sticky; top:0; z-index:100; }
+    .nav-container { width:90%; max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; }
+    .logo { font-size:1.5rem; font-weight:bold; text-shadow:0 0 8px #00bfff; }
+    .nav-links { list-style:none; display:flex; gap:20px; }
+    .nav-links a { color:#fff; text-decoration:none; transition:.3s; }
+    .nav-links a:hover { color:#90e0ef; text-shadow:0 0 8px #00bfff; }
+
+    /* Hero */
+    #hero {
+      height:90vh;
+      background:url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      display:flex; align-items:center; justify-content:center; text-align:center; color:#fff; position:relative;
+    }
+    #hero::after { content:""; position:absolute; inset:0; background:rgba(0,0,0,.5); }
+    .hero-content { position:relative; z-index:1; }
+    .hero-content h1 { font-size:3rem; margin-bottom:10px; text-shadow:0 0 12px #00bfff; }
+    .hero-content p { font-size:1.2rem; margin-bottom:20px; text-shadow:0 0 8px #00bfff; }
+    .btn { 
+      background:#00b4d8; 
+      padding:10px 20px; 
+      border-radius:30px; 
+      color:#fff; 
+      text-decoration:none; 
+      transition:.3s; 
+      box-shadow:0 0 12px #00bfff;
+    }
+    .btn:hover { background:#0096c7; box-shadow:0 0 20px #00eaff, 0 0 40px #00bfff; }
+
+    /* Section */
+    section { padding:60px 0; }
+    section h2 { text-align:center; margin-bottom:30px; color:#0077b6; text-shadow:0 0 8px #00bfff; }
+
+    /* Fade-in Effect (anti goyang) */
+    .fade-section {
+      opacity:0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      will-change: opacity, transform;
+    }
+    .fade-section.show {
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* Struktur */
+    .struktur {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 180px;
+      transition: transform .3s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border:3px solid #00bfff;
+      box-shadow:0 0 12px #00bfff, 0 0 25px #00eaff;
+    }
+    .card h3 {
+      color:#0077b6;
+      text-shadow:0 0 8px #00bfff, 0 0 15px #00eaff;
+    }
+
+    /* Instagram Button */
+    .btn-instagram {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background: #833AB4;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .btn-instagram:hover {
+      background: #E1306C;
+    }
+
+    /* Galeri */
+    .gallery img { 
+      width:100%; 
+      border-radius:10px; 
+      box-shadow:0 2px 5px rgba(0,0,0,0.2); 
+      transition:.3s; 
+      cursor: pointer;
+    }
+    .gallery img:hover { transform:scale(1.05); }
+
+    /* Footer */
+    footer { background:#0077b6; color:#fff; text-align:center; padding:20px; border-top-left-radius:20px; border-top-right-radius:20px; margin-top:40px; text-shadow:0 0 8px #00bfff; }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      cursor: zoom-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <h2 class="logo">Class XI F3</h2>
+      <ul class="nav-links">
+        <li><a href="#hero">Beranda</a></li>
+        <li><a href="#about">Tentang</a></li>
+        <li><a href="#anggota">Anggota</a></li>
+        <li><a href="#galeri">Galeri</a></li>
+        <li><a href="#developer">Developer</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Selamat Datang</h1>
+      <h1>Di Kelas XI F3</h1>
+      <p>"Bersama, Berprestasi, dan Berarti"</p>
+      <a href="#about" class="btn" id="btn-jelajahi">Jelajahi</a>
+    </div>
+  </section>
+
+  <!-- Tentang -->
+  <section id="about" class="fade-section">
+    <div class="container" style="text-align:center; max-width:800px; margin:auto;">
+      <h2>Tentang Kami</h2>
+      <p style="line-height:1.8; font-size:1.1rem;">
+        Kami adalah kelas XI F3 SMA Harapan Bangsa. Dengan penuh semangat belajar, kreativitas, 
+        dan kekompakan, kami terus berusaha menjadi generasi yang berprestasi di bidang akademik, 
+        olahraga, maupun seni.
+      </p>
+      <p><b>Jumlah Siswa:</b> 31 orang</p>
+    </div>
+  </section>
+
+  <!-- Struktur Anggota -->
+  <section id="anggota" class="fade-section">
+    <div class="container">
+      <h2>Struktur Kelas</h2>
+      <div class="struktur">
+        <!-- Wali Kelas -->
+        <div class="card">
+          <img src="https://files.catbox.moe/wpfj04.jpg" alt="Wali Kelas">
+          <h3>Bapak Wahyudi S.Pd</h3>
+          <p>Wali Kelas</p>
+        </div>
+
+        <!-- Ketua & Wakil -->
+        <div class="row">
+          <div class="card">
+            <img src="https://files.catbox.moe/0q8b3v.jpg" alt="Ketua Kelas">
+            <h3>Delon Marvinda</h3>
+            <p>Ketua Kelas</p>
+          </div>
+          <div class="card">
+            <img src="https://files.catbox.moe/w69zai.jpg" alt="Wakil Ketua">
+            <h3>Latifah Aprilia</h3>
+            <p>Wakil Ketua</p>
+          </div>
+        </div>
+
+        <!-- Sekretaris & Bendahara -->
+        <div class="row">
+          <div class="card">
+            <img src="https://files.catbox.moe/pbtg7e.jpg" alt="Sekretaris">
+            <h3>Tara Nafisa</h3>
+            <p>Sekretaris</p>
+          </div>
+          <div class="card">
+            <img src="https://files.catbox.moe/nz9fy3.jpg" alt="Bendahara 1">
+            <h3>Stefanya Queenzha</h3>
+            <p>Bendahara 1</p>
+          </div>
+          <div class="card">
+            <img src="https://files.catbox.moe/f5fpg5.jpg" alt="Bendahara 2">
+            <h3>Siti Fadila</h3>
+            <p>Bendahara 2</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Galeri -->
+<section id="galeri" class="fade-section">
+  <div class="container">
+    <h2>XI F3 Family</h2>
+    <div class="grid gallery">
+      <img src="https://files.catbox.moe/ll22un.jpg" alt="Kegiatan 1">
+      <img src="https://files.catbox.moe/x2jjuz.jpg" alt="Kegiatan 2">
+      <img src="https://files.catbox.moe/ooqcy5.jpg" alt="Kegiatan 3">
+      <img src="https://files.catbox.moe/cxfrea.jpg" alt="Kegiatan 4">
+    </div>
+
+    <!-- Tombol Lihat Selengkapnya -->
+    <div style="text-align:center; margin-top:20px;">
+      <a href="galeri.html" class="btn">Lihat Selengkapnya</a>
+    </div>
+  </div>
+</section>
+
+  <!-- Developer -->
+  <section id="developer" class="fade-section">
+    <div class="container" style="text-align:center;">
+      <h2>Developer</h2>
+      <div class="card" style="margin:auto;">
+        <img src="https://files.catbox.moe/u8czrq.webp" alt="Developer">
+        <h3>Azmi (ZimeMajesty)</h3>
+        <p></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <img src="" alt="Foto Galeri">
+  </div>
+
+  <!-- Kontak -->
+  <section id="kontak" class="fade-section">
+    <div class="container" style="text-align:center;">
+      <h2>Kontak</h2>
+      <p>Hubungi kami melalui Instagram</p>
+      <a href="https://www.instagram.com/_sebelasf3?igsh=MWxsbWR5eXFjbGRsNg==" target="_blank" class="btn-instagram">Instagram</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Kelas XI F3 | SMAN2 PULAU PUNJUNG</p>
+  </footer>
+
+  <!-- Audio -->
+  <audio id="lagu" src="https://files.catbox.moe/vxk7hl.mp3" autoplay></audio>
+
+  <script>
+    // Animasi fade-in
+    const sections = document.querySelectorAll('.fade-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, { threshold: 0.2 });
+    sections.forEach(sec => observer.observe(sec));
+
+    // Tombol jelajahi smooth scroll
+    document.getElementById("btn-jelajahi").addEventListener("click", function(e){
+      e.preventDefault();
+      document.querySelector("#about").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+
+    // Lightbox Galeri
+    const galleryImages = document.querySelectorAll('.gallery img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    galleryImages.forEach(img => {
+      img.addEventListener('click', () => {
+        lightbox.style.display = 'flex';
+        lightboxImg.src = img.src;
+      });
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
